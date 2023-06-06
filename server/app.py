@@ -13,31 +13,68 @@ load_dotenv('.env')
 
 @app.route('/openai/text', methods=['POST'])
 def process_text():
-    data = request.get_json()  # Lấy dữ liệu từ phần body của request
+    # Lấy dữ liệu từ phần body của request
+    data = request.get_json() 
     # attachments = data['attachments']
     # created = data['created']
     # sender_username = data['sender_username']
+    activeChatId = data['activeChatId']
     text = data['text']
     if text.strip() == "":
         response = {
             'message': 'null question'
         }
         return jsonify(response), 200
-    activeChatId = data['activeChatId']
 
     # Gửi yêu cầu API đến ChatEngine, BLIP
     try: 
-        # TH1: text, Gửi yêu cầu API đến OpenAI sau đó gửi response trả về đến ChatEngine, nhận response trả về sau đó trả về cho front-end
+        # TH1: text,Gửi API đến lấy các tin nhắn cũ, Gửi yêu cầu API đến OpenAI sau đó gửi response trả về đến ChatEngine, nhận response trả về sau đó trả về cho front-end
         if((not text.startswith('[image_caption]')) and (not text.startswith('[image_question]'))):
+            # Thu về messages gần đây
+            try:
+                url = f"https://api.chatengine.io/chats/{activeChatId}/messages/latest/{os.getenv('NUMBER_MESSAGE')}/"
+                payload = {}
+                headers = {
+                    'Project-ID': os.getenv('PROJECT_ID'),
+                    'User-Name': os.getenv('BOT_USER_NAME'),
+                    'User-Secret': os.getenv('BOT_USER_SECRET'),
+                }
+                response = requests.get(url, headers=headers, data=payload)
+                data = response.json()  # Chuyển đổi nội dung phản hồi thành JSON
+            except requests.exceptions.RequestException as e:
+                error_message = str(e)
+                response = {
+                    'status': 'error',
+                    'message': 'An error occurred when sending the API request to ChatEngine to get messages.',
+                    'error': error_message
+                }
+                return jsonify(response), 500
+            #Tạo messages để gửi đi cho OpenAI
+            messages = []
+            
+            for entry in data:
+                sender_username = entry['sender_username']
+                if sender_username != "AiChat_":
+                    role = "user"
+                else:
+                    role = "assistant"
+                
+                content = entry['text']
+                
+                message = {
+                    'role': role,
+                    'content': content
+                }
+                
+                messages.append(message)
+            # Sau khi thu về message, gửi nó cho openAI
             try:
                 openai.api_key = os.getenv('OPEN_API_KEY')
-                completion = openai.Completion.create(
-                    model="text-davinci-003",
-                    prompt=text,
-                    max_tokens=30,
-                    temperature=0
-                    )
-                data_send_to_user = completion['choices'][0]['text']
+                completion = openai.ChatCompletion.create(
+                    model="gpt-3.5-turbo",
+                    messages=messages,
+                )
+                data_send_to_user = completion['choices'][0]['message']['content']
             except requests.exceptions.RequestException as e:
                 error_message = str(e)
                 response = {
@@ -46,20 +83,31 @@ def process_text():
                     'error': error_message
                 }
                 return jsonify(response), 500
-            # Send completion_text to ChatEngine
-            chatengine_endpoint = f"https://api.chatengine.io/chats/{activeChatId}/messages/"
-            chatengine_payload = {
-                'text': data_send_to_user
-            }
-            chatengine_headers = {
-                'Project-ID': os.getenv('PROJECT_ID'),
-                'User-Name': os.getenv('BOT_USER_NAME'),
-                'User-Secret': os.getenv('BOT_USER_SECRET'),
-                'Content-Type': 'application/json'
-            }
-            chatengine_response = requests.post(chatengine_endpoint, json=chatengine_payload, headers=chatengine_headers)
-            return jsonify(chatengine_response.json()), 200
-        # TH2: caption, Tạo caption cho ảnh gần nhất trong cuộc hội thoại
+
+            # Send data_send_to_user tới ChatEngine để hiển thị cho người dùng thấy
+            try:
+                chatengine_endpoint = f"https://api.chatengine.io/chats/{activeChatId}/messages/"
+                chatengine_payload = {
+                    'text': data_send_to_user
+                }
+                chatengine_headers = {
+                    'Project-ID': os.getenv('PROJECT_ID'),
+                    'User-Name': os.getenv('BOT_USER_NAME'),
+                    'User-Secret': os.getenv('BOT_USER_SECRET'),
+                    'Content-Type': 'application/json'
+                }
+                chatengine_response = requests.post(chatengine_endpoint, json=chatengine_payload, headers=chatengine_headers)
+                return jsonify(chatengine_response.json()), 200
+            except requests.exceptions.RequestException as e:
+                error_message = str(e)
+                response = {
+                    'status': 'error',
+                    'message': 'An error occurred when send the API request to send message to user.',
+                    'error': error_message
+                }
+                return jsonify(response), 500
+                
+        # TH2: Trường hợp text = [image_caption], Tạo caption cho ảnh gần nhất trong cuộc hội thoại
         # Lấy đường dẫn của ảnh từ ChatEngine, sau đó gửi API đến blip, sau đó gửi lại đến ChatEngine, sau đó gửi lại front-end
         elif(text.startswith('[image_caption]')):
             chatengine_get_image = f"https://api.chatengine.io/chats/{activeChatId}/"
@@ -114,6 +162,7 @@ def process_text():
                 }
                 return jsonify(response), 400
         # Trường hợp text = [image_question]...
+        # Lấy đường dẫn của ảnh từ ChatEngine, sau đó gửi API đến blip, sau đó gửi lại đến ChatEngine, sau đó gửi lại front-end
         else: 
             chatengine_get_image = f"https://api.chatengine.io/chats/{activeChatId}/"
             chatengine_get_image_payload = {}

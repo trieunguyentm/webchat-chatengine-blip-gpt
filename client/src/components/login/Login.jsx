@@ -21,7 +21,7 @@ const Login = ({ setUser, setSecret }) => {
       setUser(username);
       setSecret(password);
     }
-  }, [resultLogin.data]); // eslint-disable-line
+  }, [resultLogin.data]);
 
   return (
     <div className="login-page">

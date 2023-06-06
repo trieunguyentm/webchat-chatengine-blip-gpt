@@ -89,7 +89,6 @@ const MessageFormUI = ({
               setPreview("");
               handleSubmit();
             }}
-
           />
         </div>
       </form>
