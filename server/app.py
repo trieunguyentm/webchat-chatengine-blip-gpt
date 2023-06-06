@@ -29,30 +29,27 @@ def process_text():
     try: 
         # TH1: text, Gửi yêu cầu API đến OpenAI sau đó gửi response trả về đến ChatEngine, nhận response trả về sau đó trả về cho front-end
         if((not text.startswith('[image_caption]')) and (not text.startswith('[image_question]'))):
-            # try:
-            #     openai.api_key = "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"
-            #     completion = openai.ChatCompletion.create(
-            #         model="gpt-3.5-turbo",
-            #         messages=[
-            #             {"role": "user", "content": "Hello!"}
-            #         ]
-            #     )
-            #     data = {'data': completion.choices[0].message}
-            #     return jsonify(data), 200
-            #     # Continue with the rest of your code to send the response back to ChatEngine, etc.
-            #     # return jsonify(chatengine_response.json()), 200
-            # except requests.exceptions.RequestException as e:
-            #     error_message = str(e)
-            #     response = {
-            #         'status': 'error',
-            #         'message': 'An error occurred during the API request to OpenAI.',
-            #         'error': error_message
-            #     }
-            #     return jsonify(response), 500
+            try:
+                openai.api_key = os.getenv('OPEN_API_KEY')
+                completion = openai.Completion.create(
+                    model="text-davinci-003",
+                    prompt=text,
+                    max_tokens=30,
+                    temperature=0
+                    )
+                data_send_to_user = completion['choices'][0]['text']
+            except requests.exceptions.RequestException as e:
+                error_message = str(e)
+                response = {
+                    'status': 'error',
+                    'message': 'An error occurred during the API request to OpenAI.',
+                    'error': error_message
+                }
+                return jsonify(response), 500
             # Send completion_text to ChatEngine
             chatengine_endpoint = f"https://api.chatengine.io/chats/{activeChatId}/messages/"
             chatengine_payload = {
-                'text': text
+                'text': data_send_to_user
             }
             chatengine_headers = {
                 'Project-ID': os.getenv('PROJECT_ID'),
