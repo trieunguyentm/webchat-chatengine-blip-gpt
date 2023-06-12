@@ -26,69 +26,6 @@ body,
   font-family: "Rubik", sans-serif;
 }
 
-.layout {
-  width: 100%;
-  display: flex;
-}
-
-.servers {
-  background-color: $primary-500;
-}
-
-.flexbetween {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-}
-
-.dropzone {
-  width: 30px !important;
-  height: 15px !important;
-}
-
-.login-page {
-  background-color: $primary-500;
-  height: 100%;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.login-container {
-  color: $tertiary-50;
-}
-
-.login-actions {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-}
-
-.login-input {
-  box-sizing: border-box;
-  width: 100%;
-  height: 40px;
-  border: none;
-  border-radius: 5px;
-  padding: 0 10px;
-  margin: 10px 0;
-  background-color: $primary-600;
-  color: $tertiary-50;
-}
-
-.register-change {
-  text-decoration: underline;
-  color: $secondary-500;
-}
-
-.register-change:hover {
-  text-decoration: underline;
-  color: $tertiary-100;
-  cursor: pointer;
-}
-
 /* Chat Styling */
 .ce-chat-engine {
   color: $tertiary-50 !important;

@@ -10,14 +10,11 @@ CORS(app)  # Áp dụng cấu hình CORS cho ứng dụng Flask
 
 # Load environment variables from .env file
 load_dotenv('.env')
-
+# API gửi tin nhắn cho ChatBot
 @app.route('/openai/text', methods=['POST'])
 def process_text():
     # Lấy dữ liệu từ phần body của request
     data = request.get_json() 
-    # attachments = data['attachments']
-    # created = data['created']
-    # sender_username = data['sender_username']
     activeChatId = data['activeChatId']
     text = data['text']
     if text.strip() == "":
@@ -145,8 +142,6 @@ def process_text():
                     }
                     chatengine_response = requests.post(chatengine_endpoint, json=chatengine_payload, headers=chatengine_headers)
                     return jsonify(chatengine_response.json()), 200
-                    # Process the response as needed
-                    # return jsonify(response_data), 200
                 except requests.exceptions.RequestException as e:
                     error_message = str(e)
                     response = {
@@ -199,8 +194,6 @@ def process_text():
                     }
                     chatengine_response = requests.post(chatengine_endpoint, json=chatengine_payload, headers=chatengine_headers)
                     return jsonify(chatengine_response.json()), 200
-                    # Process the response as needed
-                    # return jsonify(response_data), 200
                 except requests.exceptions.RequestException as e:
                     error_message = str(e)
                     response = {
@@ -224,7 +217,30 @@ def process_text():
         }
         return jsonify(response), 500
 
+@app.route('/auth/login', methods=['POST'])
+def login():
+    response = requests.get('https://api.chatengine.io/users/me/', 
+        headers={ 
+            "Project-ID": os.environ['PROJECT_ID'],
+            "User-Name": request.get_json()['username'],
+            "User-Secret": request.get_json()['secret']
+        }
+    )
+    return response.json()
 
+@app.route('/auth/signup', methods=['POST'])
+def signup():
+    response = requests.post('https://api.chatengine.io/users/', 
+        data={
+            "username": request.get_json()['username'],
+            "secret": request.get_json()['secret'],
+            "email": request.get_json()['email'],
+            "first_name": request.get_json()['first_name'],
+            "last_name": request.get_json()['last_name'],
+        },
+        headers={ "Private-Key": os.environ['PRIVATE_KEY'] }
+    )
+    return response.json()
 
 if __name__ == '__main__':
     app.run(port=2400)
