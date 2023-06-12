@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Grid, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
 import EmailIcon from '@mui/icons-material/Email';
 import BadgeIcon from '@mui/icons-material/Badge';
 import PersonIcon from '@mui/icons-material/Person';
@@ -10,6 +10,9 @@ import { toast } from "react-toastify";
 import axios from "axios";
 
 export default function LayoutProfile(props) {
+
+    // openDialog
+    const [openDialog, setOpenDialog] = useState(false);
 
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
@@ -24,6 +27,44 @@ export default function LayoutProfile(props) {
 
     const obj = useParams();
     const idProfile = obj.id;
+
+    const handleClickSave = () => {
+        // Kiểm tra email nhập vào
+        let pattern = /^[a-zA-Z0-9._]+@gmail.com$/;
+        if (!pattern.test(email)) {
+            toast.info("Gmail must be in the format of @gmail.com");
+            return;
+        }
+        handleOpenDialog();
+    }
+
+    const handleOpenDialog = () => {
+        setOpenDialog(true);
+    };
+
+    const handleCloseDialog = async (choice) => {
+        setOpenDialog(false);
+        if (choice === "Yes") {
+            try {
+                const url = `https://api.chatengine.io/users/${Cookies.get('id')}/`
+                const data = {
+                    email: email,
+                    first_name: firstname,
+                    last_name: lastname
+                }
+                const headers = {
+                    'PRIVATE-KEY': import.meta.env.VITE_PROJECT_KEY,
+                }
+                const response = await axios.patch(url, data, { headers })
+                // Xử lý sau thành công
+                if (response.data.is_authenticated) {
+                    toast.success("Change information successfully")
+                }
+            } catch (error) {
+                toast.error("An error occurred while connecting to the server")
+            }
+        }
+    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -175,7 +216,7 @@ export default function LayoutProfile(props) {
                         <Button
                             className="icon-button"
                             variant="contained"
-                            // onClick={(event) => handleClickSave(event)}
+                            onClick={(event) => handleClickSave(event)}
                             title="Click to save"
                             disabled={canSave === true ? false : true}
                         >
@@ -184,6 +225,18 @@ export default function LayoutProfile(props) {
                     </Grid>
                 </Grid>
             </Grid>
+            <Dialog open={openDialog} onClose={() => handleCloseDialog("")} disableEscapeKeyDown={true}>
+                <DialogTitle>Confirm</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Confirm change information
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => handleCloseDialog("Yes")} className="icon-button">Yes</Button>
+                    <Button onClick={() => handleCloseDialog("No")} className="icon-button">No</Button>
+                </DialogActions>
+            </Dialog>
         </Box>
     );
 }
