@@ -15,7 +15,7 @@ import Cookies from "js-cookie";
 const settings = ["Profile", "Logout"];
 
 function HeaderTab(props) {
-    // props.page
+
     const navigate = useNavigate();
 
     const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -36,17 +36,21 @@ function HeaderTab(props) {
         if (setting === "Logout") {
             // Xử lý lưu trữ trong Cookies
             Cookies.set('isLogin', false);
+            Cookies.remove('username');
+            Cookies.remove('secret');
+            Cookies.remove('linkAvatar');
+            Cookies.remove('id');
             navigate("/login");
         }
         else {
-            const url = `/${setting.toLowerCase().replace(" ", "_")}`;
+            const url = `/${setting.toLowerCase().replace(" ", "_")}/${Cookies.get('id')}`;
             navigate(url);
         }
         handleCloseUserMenu();
     }
 
     return (
-        <AppBar position="static">
+        <AppBar position="static" className="header-tab">
             <Container maxWidth="xl">
                 <Toolbar>
                     {/* Icon Home */}
@@ -56,7 +60,7 @@ function HeaderTab(props) {
                     {/* Tạo Box, bao gồm Icon Avatar và các MenuItem hiển thị khi người dùng click vào */}
                     <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end' }}>
                         <IconButton onClick={handleOpenUserMenu} sx={{ marginLeft: 'auto' }} className="icon-button">
-                            <Avatar />
+                            <Avatar alt={`${props.user}`} src={`${props.linkAvatar}`} />
                         </IconButton>
                         <Menu
                             sx={{ mt: "45px" }}

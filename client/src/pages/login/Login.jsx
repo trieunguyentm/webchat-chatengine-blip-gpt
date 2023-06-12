@@ -8,7 +8,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 
-export default function Login(props) {
+export default function Login() {
   const navigate = useNavigate();
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
@@ -29,10 +29,14 @@ export default function Login(props) {
       }
       // Thông tin chính xác
       else {
+        // console.log(response);
+        // console.log(response.data.avatar);
         toast.success("Login successful");
-        props.setUser(userName);
-        props.setSecret(password);
+        Cookies.set("username", userName);
+        Cookies.set("secret", password);
+        Cookies.set("linkAvatar", response.data.avatar);
         Cookies.set("isLogin", true);
+        Cookies.set("id", response.data.id);
         navigate("/chat");
         return;
       }
@@ -57,7 +61,7 @@ export default function Login(props) {
             justifyContent="center"
             style={{ minHeight: "100vh" }}
           >
-            <Paper elevation={20} sx={{ padding: 4, margin: 4 }}>
+            <Paper className="paper-login" elevation={20} sx={{ padding: 4, margin: 4 }}>
               <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: 1 }}>
                 <h1 style={{ color: 'green' }}> SIGN IN </h1>
               </Box>
@@ -76,7 +80,7 @@ export default function Login(props) {
                       value={userName}
                       onChange={(e) => setUserName(e.target.value)}
                       placeholder="Enter your username"
-                      style={{ borderWidth: "0px 0px 3px 0px", borderColor: "green", fontWeight: "bold" }}
+                      style={{ borderWidth: "0px 0px 3px 0px", borderColor: "green", fontWeight: "bold", backgroundColor: "transparent", width: '60%' }}
                       onFocus={(e) => e.target.style.outline = "none"}
                       title="Enter your username"
                       onKeyDown={(e) => {
@@ -96,7 +100,7 @@ export default function Login(props) {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="Enter your password"
-                      style={{ borderWidth: "0px 0px 3px 0px", borderColor: "green", fontWeight: "bold" }}
+                      style={{ borderWidth: "0px 0px 3px 0px", borderColor: "green", fontWeight: "bold", backgroundColor: "transparent", width: '60%' }}
                       onFocus={(e) => e.target.style.outline = "none"}
                       title="Enter your password"
                       onKeyDown={(e) => {
@@ -123,10 +127,9 @@ export default function Login(props) {
                     <Link
                       to="/signup"
                       style={{
-                        textDecoration: 'none',
                         display: 'flex', textAlign: 'center',
                         justifyContent: 'center',
-                        color: 'dodgerblue',
+                        color: 'green',
                         fontSize: '15px',
                       }}
                       title="Click to sign up">

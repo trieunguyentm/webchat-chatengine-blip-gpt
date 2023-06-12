@@ -7,22 +7,21 @@ import {
 import Header from "@/components/customerHeader/CustomerHeader";
 import StandardMessageForm from "@/components/customMessageForms/StandardMessageForm";
 import Ai from "@/components/customMessageForms/Ai";
-import HeaderTab from "../headerTab/HeaderTab";
+import HeaderTab from "../../components/headerTab/HeaderTab";
 import { Navigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
-const Chat = (props) => {
-  // const user = 'admin';
-  const user = props.user
-  // const secret = '123456789';
-  const secret = props.secret
-  
+const Chat = () => {
+  const user = Cookies.get('username');
+  const secret = Cookies.get('secret')
+  const linkAvatar = Cookies.get('linkAvatar');
+
   const chatProps = useMultiChatLogic(
     import.meta.env.VITE_PROJECT_ID,
     user,
     secret
   );
-  console.log(chatProps);
+  // console.log(chatProps);
 
   const checkLogin = (Cookies.get('isLogin') === 'true');
 
@@ -33,7 +32,7 @@ const Chat = (props) => {
     return (
       <>
         <div>
-          <HeaderTab />
+          <HeaderTab linkAvatar={linkAvatar} user={user} />
         </div>
         <div style={{ flexBasis: "100%" }}>
           <MultiChatSocket {...chatProps} />
