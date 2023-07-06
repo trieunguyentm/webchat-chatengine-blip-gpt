@@ -68,11 +68,18 @@ export default function Login() {
               <form>
                 <Grid
                   container
-                  spacing={2}
+                  spacing={4}
                   direction="column"
                 >
                   <Grid item style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <label htmlFor="username" ><PersonIcon style={{ fontSize: '40px', color: 'green' }} /></label>
+                    <label htmlFor="username" >
+                      <PersonIcon
+                        style={{
+                          fontSize: '40px',
+                          color: 'green',
+                          marginRight: '10px',
+                        }} />
+                    </label>
                     <input
                       id="username"
                       type="text"
@@ -92,7 +99,14 @@ export default function Login() {
                   </Grid>
 
                   <Grid item style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <label htmlFor="password" ><KeyIcon style={{ fontSize: '40px', color: 'green' }} /></label>
+                    <label htmlFor="password" >
+                      <KeyIcon
+                        style={{
+                          fontSize: '40px',
+                          color: 'green',
+                          marginRight: '10px',
+                        }} />
+                    </label>
                     <input
                       id="password"
                       type="password"
@@ -113,6 +127,7 @@ export default function Login() {
 
                   <Grid item style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                     <Button
+                      className="btn-signin"
                       variant="contained"
                       endIcon={<ArrowForwardIcon />}
                       onClick={handleClickSignIn}

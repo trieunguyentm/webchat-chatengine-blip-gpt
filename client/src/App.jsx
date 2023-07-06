@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Cookies from "js-cookie";
 import SignUp from "./pages/signup/Signup";
 import Profile from "./pages/profile/Profile";
+import './App.scss'
 
 function App() {
   const checkLogin = (Cookies.get('isLogin') === 'true');

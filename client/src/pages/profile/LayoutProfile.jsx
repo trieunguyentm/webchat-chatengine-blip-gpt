@@ -110,8 +110,8 @@ export default function LayoutProfile(props) {
             {/* Nội dung */}
             <Grid container spacing={2} sx={{ paddingTop: '20px' }}>
                 {/* Email */}
-                <Grid container sx={{ paddingTop: '20px' }}>
-                    <Grid item sx={{ paddingRight: '20px', paddingLeft: '15px' }} xs={1}>
+                <Grid container style={{ paddingTop: '20px' }}>
+                    <Grid item style={{ paddingRight: '20px', paddingLeft: '15px' }} xs={1}>
                         <Typography><strong>Email</strong></Typography>
                     </Grid>
                     <Grid item sx={{ paddingRight: '20px' }} xs={3}>
@@ -215,6 +215,7 @@ export default function LayoutProfile(props) {
                     <Grid container sx={{ paddingLeft: '20px', paddingTop: '20px' }}>
                         <Button
                             className="icon-button"
+                            id="btn-save-profile"
                             variant="contained"
                             onClick={(event) => handleClickSave(event)}
                             title="Click to save"

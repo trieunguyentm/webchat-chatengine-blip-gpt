@@ -27,14 +27,61 @@ body,
   font-family: "Rubik", sans-serif;
 }
 
+body {
+  margin: 0;
+  font-family: SVN-Poppins !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
+}
+
+code {
+  font-family: SVN-Poppins, monospace !important;
+}
+
+// Login
 .paper-login {
   background: rgb(2, 0, 36);
   background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(40, 146, 167, 1) 0%, rgba(37, 191, 59, 0.3926820728291317) 100%);
 }
 
+// Header
 .header-tab {
   background: rgb(2, 0, 36);
   background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(40, 146, 167, 1) 0%, rgba(37, 191, 59, 0.3926820728291317) 100%);
+}
+
+.btn-signin {
+  transition: transform 0.5s !important;
+}
+
+.btn-signin:hover {
+  transform: translateY(-6px) !important;
+}
+
+.link-text {
+  transition: transform 0.5s !important;
+}
+
+.link-text:hover {
+  transform: scale(1.1) !important;
+}
+
+.btn-signup {
+  transition: transform 0.5s !important;
+}
+
+.btn-signup:hover {
+  transform: scale(1.1) !important;
+}
+
+// Profile
+#btn-save-profile {
+  transition: transform 0.5s !important;
+}
+
+#btn-save-profile:hover {
+  transform: scale(1.1) !important;
 }
 
 /* Chat Styling */

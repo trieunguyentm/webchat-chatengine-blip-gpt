@@ -102,7 +102,7 @@ export default function SignUp() {
                 <Container fixed maxWidth="sm">
                     <Grid
                         container
-                        spacing={3}
+                        spacing={4}
                         direction="column"
                         justifyContent="center"
                         style={{ minHeight: "100vh" }}
@@ -119,7 +119,9 @@ export default function SignUp() {
                                 >
                                     {/* User name */}
                                     <Grid item style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                        <label htmlFor="username" ><PersonIcon style={{ fontSize: '40px', color: 'green' }} /></label>
+                                        <label htmlFor="username" >
+                                            <PersonIcon style={{ fontSize: '40px', color: 'green', marginRight: '10px' }} />
+                                        </label>
                                         <input
                                             required
                                             id="username"
@@ -140,7 +142,9 @@ export default function SignUp() {
                                     </Grid>
                                     {/* Password */}
                                     <Grid item style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                        <label htmlFor="password" ><KeyIcon style={{ fontSize: '40px', color: 'green' }} /></label>
+                                        <label htmlFor="password" >
+                                            <KeyIcon style={{ fontSize: '40px', color: 'green', marginRight: '10px' }} />
+                                        </label>
                                         <input
                                             required
                                             id="password"
@@ -161,7 +165,9 @@ export default function SignUp() {
                                     </Grid>
                                     {/* Confirm password */}
                                     <Grid item style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                        <label htmlFor="confirm_password" ><KeyIcon style={{ fontSize: '40px', color: 'green' }} /></label>
+                                        <label htmlFor="confirm_password" >
+                                            <KeyIcon style={{ fontSize: '40px', color: 'green', marginRight: '10px' }} />
+                                        </label>
                                         <input
                                             required
                                             id="confirm_password"
@@ -182,7 +188,9 @@ export default function SignUp() {
                                     </Grid>
                                     {/* First name */}
                                     <Grid item style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                        <label htmlFor="firstname" ><BadgeIcon style={{ fontSize: '40px', color: 'green' }} /></label>
+                                        <label htmlFor="firstname" >
+                                            <BadgeIcon style={{ fontSize: '40px', color: 'green', marginRight: '10px' }} />
+                                        </label>
                                         <input
                                             required
                                             id="firstname"
@@ -203,7 +211,9 @@ export default function SignUp() {
                                     </Grid>
                                     {/* Last name */}
                                     <Grid item style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                        <label htmlFor="lastname" ><DriveFileRenameOutlineIcon style={{ fontSize: '40px', color: 'green' }} /></label>
+                                        <label htmlFor="lastname" >
+                                            <DriveFileRenameOutlineIcon style={{ fontSize: '40px', color: 'green', marginRight: '10px' }} />
+                                        </label>
                                         <input
                                             required
                                             id="lastname"
@@ -224,7 +234,9 @@ export default function SignUp() {
                                     </Grid>
                                     {/* Gmail */}
                                     <Grid item style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                        <label htmlFor="gmail" ><EmailIcon style={{ fontSize: '40px', color: 'green' }} /></label>
+                                        <label htmlFor="gmail" >
+                                            <EmailIcon style={{ fontSize: '40px', color: 'green', marginRight: '10px' }} />
+                                        </label>
                                         <input
                                             required
                                             id="gmail"
@@ -258,11 +270,12 @@ export default function SignUp() {
                                     {/* Button */}
                                     <Grid item style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                         <Button
+                                            className='btn-signup'
                                             variant="contained"
                                             endIcon={<ArrowForwardIcon />}
                                             onClick={handleClickSignUp}
                                             title="Click to sign in"
-                                            style={{ backgroundColor: "green" }}
+                                            style={{ backgroundColor: "green", margin: '20px 0' }}
                                         >
                                             Sign Up
                                         </Button>
