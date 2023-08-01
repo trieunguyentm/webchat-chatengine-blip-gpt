@@ -60,7 +60,7 @@ function HeaderTab(props) {
                     {/* Tạo Box, bao gồm Icon Avatar và các MenuItem hiển thị khi người dùng click vào */}
                     <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end' }}>
                         <IconButton onClick={handleOpenUserMenu} sx={{ marginLeft: 'auto' }} className="icon-button">
-                            <Avatar alt={`${props.user}`} src={`${props.linkAvatar}`} />
+                            <Avatar alt={`${props.user.toUpperCase()}`} src={`${props.linkAvatar}`} />
                         </IconButton>
                         <Menu
                             sx={{ mt: "45px" }}

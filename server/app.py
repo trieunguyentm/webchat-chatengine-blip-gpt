@@ -26,7 +26,11 @@ def process_text():
     # Gửi yêu cầu API đến ChatEngine, BLIP
     try: 
         # TH1: text,Gửi API đến lấy các tin nhắn cũ, Gửi yêu cầu API đến OpenAI sau đó gửi response trả về đến ChatEngine, nhận response trả về sau đó trả về cho front-end
-        if((not text.startswith('[image_caption]')) and (not text.startswith('[image_question]'))):
+        if(
+           (not text.startswith('[image_caption]')) 
+           and (not text.startswith('[image_question]'))
+           and (not text.startswith('[image_gen]'))
+           ):
             # Thu về messages gần đây
             try:
                 url = f"https://api.chatengine.io/chats/{activeChatId}/messages/latest/{os.getenv('NUMBER_MESSAGE')}/"
@@ -156,6 +160,44 @@ def process_text():
                     'message': 'No image attachment found.'
                 }
                 return jsonify(response), 400
+        # Trường hợp 3: text = [image_gen]...
+        elif(text.startswith('[image_gen]')):
+            prompt = text[11:]
+            openai.api_key = os.getenv('OPEN_API_KEY')
+            response = openai.Image.create(
+                prompt=prompt,
+                n=1,
+                size="512x512"
+            )  
+            image_url = response['data'][0]['url']
+
+            # return jsonify({
+            #     "url": image_url}), 200
+            # Gửi image_url cho người dùng
+            url_send_message = f"https://api.chatengine.io/chats/{activeChatId}/messages/"
+            payload = {
+                'text': '',
+                'attachment_urls': [image_url],
+                'custom_json': '{}'
+            }
+            chatengine_headers = {
+                'Project-ID': os.getenv('PROJECT_ID'),
+                'User-Name': os.getenv('BOT_USER_NAME'),
+                'User-Secret': os.getenv('BOT_USER_SECRET'),
+                'Content-Type': 'application/json'
+            }
+            try:
+                chatengine_response = requests.post(url=url_send_message, json=payload, headers=chatengine_headers)
+                return jsonify(chatengine_response.json()), 200
+            except requests.exceptions.RequestException as e:
+                error_message = str(e)
+                response = {
+                    'status': 'error',
+                    'message': 'An error occurred during the API request to BLIP.',
+                    'error': error_message
+                }
+                return jsonify(response), 500
+            
         # Trường hợp text = [image_question]...
         # Lấy đường dẫn của ảnh từ ChatEngine, sau đó gửi API đến blip, sau đó gửi lại đến ChatEngine, sau đó gửi lại front-end
         else: 
