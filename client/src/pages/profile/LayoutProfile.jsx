@@ -59,6 +59,10 @@ export default function LayoutProfile(props) {
                 // Xử lý sau thành công
                 if (response.data.is_authenticated) {
                     toast.success("Change information successfully")
+                    setOpenChangeEmail(false);
+                    setOpenChangeFirstName(false);
+                    setOpenChangeLastName(false);
+                    setCanSave(false);
                 }
             } catch (error) {
                 toast.error("An error occurred while connecting to the server")
