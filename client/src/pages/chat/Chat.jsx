@@ -65,7 +65,7 @@ const Chat = () => {
     user,
     secret
   );
-  console.log(chatProps)
+  // console.log(chatProps)
   const checkLogin = (Cookies.get('isLogin') === 'true');
 
   if (!checkLogin) {
@@ -100,7 +100,7 @@ const Chat = () => {
               }
             }}
             onRemovePersonClick={(people) => {
-              console.log(people)
+              // console.log(people)
               if (chatProps.chat?.title.startsWith("AiChat_") && people.username === "AiChat_") {
                 toast.info("AI bot cannot be removed from this chat")
               }

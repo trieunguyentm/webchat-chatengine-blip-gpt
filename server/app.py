@@ -166,18 +166,17 @@ def process_text():
             openai.api_key = os.getenv('OPEN_API_KEY')
             response = openai.Image.create(
                 prompt=prompt,
-                n=1,
+                n=4,
                 size="512x512"
             )  
-            image_url = response['data'][0]['url']
-
-            # return jsonify({
-            #     "url": image_url}), 200
+            arr_url = []
+            for i in range(4):
+                arr_url.append(response['data'][i]['url'])
             # Gửi image_url cho người dùng
             url_send_message = f"https://api.chatengine.io/chats/{activeChatId}/messages/"
             payload = {
                 'text': '',
-                'attachment_urls': [image_url],
+                'attachment_urls': arr_url,
                 'custom_json': '{}'
             }
             chatengine_headers = {
