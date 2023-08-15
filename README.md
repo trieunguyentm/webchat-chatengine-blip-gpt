@@ -17,5 +17,7 @@ BOT_USER_SECRET={Tự tạo một secret cho AiChat_ bằng Chat Engine}</br>
 OPEN_API_KEY={OPEN_API_KEY trên OpenAI}</br>
 NUMBER_MESSAGE=20</br>
 Khởi chạy: <b>python app.py</b>
+<h1>Tài liệu PTTK Hệ thống</h1>
+https://drive.google.com/drive/u/0/folders/1TMGcILhCQ1s0yvRnia9BqqPGywhqxwtC
 
 
